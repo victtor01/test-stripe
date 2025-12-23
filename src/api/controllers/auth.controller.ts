@@ -1,4 +1,4 @@
-import { AuthInstructorUseCase } from "@/application/usecases/auth/auth-instructor/auth-instructor.usecase";
+import { AuthInstructorUseCase } from "@/application/usecases/authenticate/auth-instructor/auth-instructor.usecase";
 import { Controller, Get } from "@/infra/decorators/controller.decorator";
 import { Use } from "@/infra/decorators/middleware.decorator";
 import type { Request, Response } from "express";

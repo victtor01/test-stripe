@@ -23,9 +23,7 @@ class Container {
 
     const tokens: any[] = Reflect.getMetadata(METADATA_KEYS.PARAM_TYPES, target) || [];
     
-    // 2. Resolve dependências recursivamente
     const injections = tokens.map((t, index) => {
-      // Verifica se existe um token específico via @Inject (opcional, para strings)
       const manualToken = Reflect.getMetadata(`custom:inject:${index}`, target);
       return this.resolve(manualToken || t);
     });
