@@ -7,7 +7,11 @@ export abstract class Entity<Props> {
   }
 
   protected constructor(props: Props, id?: string) {
-    this.props = props;
-    this._id = id ?? crypto.randomUUID(); // Ou uma classe UniqueEntityID
+   this.props = Object.freeze(props);
+    this._id = id ?? crypto.randomUUID();
+  }
+
+   protected snapshot(): Readonly<Props> {
+    return this.props;
   }
 }

@@ -1,8 +1,15 @@
 import "reflect-metadata";
-import { METADATA_KEYS } from "./constants.ts";
+
+import { METADATA_KEYS } from "./constants";
+
+type AbstractConstructor<T = any> = abstract new (...args: any[]) => T;
 
 type Constructor<T = any> = new (...args: any[]) => T;
-type Token = string | symbol | Constructor;
+type Token<T = any> =
+  | string
+  | symbol
+  | Constructor<T>
+  | AbstractConstructor<T>;
 
 class Container {
   private instances = new Map<any, any>();
@@ -14,9 +21,10 @@ class Container {
   }
 
   resolve<T>(token: Token): T {
+    
     // 1. Verifica se o token tem uma implementação mapeada (Inversão)
     const target = this.providers.get(token) || (token as Constructor);
-
+    
     if (this.instances.has(target)) {
       return this.instances.get(target);
     }

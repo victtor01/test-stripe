@@ -8,8 +8,8 @@ interface UserProps {
   email: Email;
   name: string;
   isVerified: boolean;
-
   createdAt: Date;
+  password: string;
   roles: UserRole[];
 }
 
@@ -23,12 +23,8 @@ export class User extends Entity<UserProps> {
   private static readonly NAME_MIN_LENGTH = 5;
   private static readonly NAME_MAX_LENGTH = 100;
 
-  get name() {
-    return this.props.name;
-  }
-
-  get email() {
-    return this.props.email;
+  get data() {
+    return this.snapshot();
   }
 
   private constructor(props: UserProps, id?: string) {
@@ -63,5 +59,9 @@ export class User extends Entity<UserProps> {
       },
       id
     );
+  }
+
+  static restore(props: UserProps, id: string): User {
+    return new User(props, id);
   }
 }
