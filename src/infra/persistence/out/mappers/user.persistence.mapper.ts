@@ -2,7 +2,7 @@ import { Email } from "@/domain/entities/Email";
 import { User } from "@/domain/entities/User";
 import { UserEntity } from "../schemas/User.entity";
 
-export class UserMapper {
+export class UserPersistenceMapper {
   static toModel(entity: UserEntity): User {
     return User.restore(
       {

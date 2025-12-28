@@ -20,6 +20,10 @@ class Container {
     this.providers.set(token, implementation);
   }
 
+  registerInstance<T>(token: Token, instance: T) {
+    this.instances.set(token, instance);
+  }
+
   resolve<T>(token: Token): T {
     
     // 1. Verifica se o token tem uma implementação mapeada (Inversão)

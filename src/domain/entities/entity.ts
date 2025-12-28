@@ -7,11 +7,12 @@ export abstract class Entity<Props> {
   }
 
   protected constructor(props: Props, id?: string) {
-   this.props = Object.freeze(props);
+    this.props = props;
     this._id = id ?? crypto.randomUUID();
+    Object.freeze(this);
   }
 
-   protected snapshot(): Readonly<Props> {
+  protected snapshot(): Readonly<Props> {
     return this.props;
   }
 }

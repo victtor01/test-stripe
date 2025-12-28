@@ -1,11 +1,7 @@
-import {
-  METADATA_KEYS,
-  type HttpMethod,
-  type RouteDefinition,
-} from "../di/constants.ts";
-import { normalizePath } from "../utils/normalize-path.ts";
+import { METADATA_KEYS, type HttpMethod, type RouteDefinition } from '../di/constants';
+import { normalizePath } from '../utils/normalize-path';
 
-export function Controller(prefix: string = ""): ClassDecorator {
+export function Controller(prefix: string = ''): ClassDecorator {
   return (target) => {
     Reflect.defineMetadata(METADATA_KEYS.CONTROLLER, prefix, target);
   };
@@ -13,11 +9,7 @@ export function Controller(prefix: string = ""): ClassDecorator {
 
 function createRouteDecorator(method: HttpMethod) {
   return (path?: string): MethodDecorator => {
-    return (
-      target: any,
-      propertyKey: string | symbol,
-      descriptor: PropertyDescriptor
-    ) => {
+    return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
       const controllerClass = target.constructor;
 
       const routes: RouteDefinition[] =
@@ -36,7 +28,7 @@ function createRouteDecorator(method: HttpMethod) {
   };
 }
 
-export const Get = createRouteDecorator("get");
-export const Post = createRouteDecorator("post");
-export const Put = createRouteDecorator("put");
-export const Delete = createRouteDecorator("delete");
+export const Get = createRouteDecorator('get');
+export const Post = createRouteDecorator('post');
+export const Put = createRouteDecorator('put');
+export const Delete = createRouteDecorator('delete');

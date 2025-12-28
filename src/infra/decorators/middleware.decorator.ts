@@ -1,7 +1,7 @@
-import type { RequestHandler } from "express";
-import { METADATA_KEYS } from "../di/constants";
+import type { RequestHandler } from 'express';
+import { METADATA_KEYS } from '../di/constants';
 
-export function Use(...middlewares: RequestHandler[]): any {
+export function Use(...middlewares: (RequestHandler | any)[]): any {
   return (target: any, propertyKey?: string | symbol) => {
     if (propertyKey) {
       Reflect.defineMetadata(METADATA_KEYS.MIDDLEWARE, middlewares, target, propertyKey);

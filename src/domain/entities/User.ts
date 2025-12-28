@@ -1,19 +1,22 @@
-import { UserRole } from "../enums/UserRole";
-import { InvalidLengthException } from "../exceptions/InvalidLengthException";
-import { nameof } from "../utils/nameof-utils";
-import { Email } from "./Email";
-import { Entity } from "./entity";
+import { UserRole } from '../enums/UserRole';
+import { InvalidLengthException } from '../exceptions/InvalidLengthException';
+import { nameof } from '../utils/nameof-utils';
+import { Email } from './Email';
+import { Entity } from './entity';
+import { InstructorProfile } from './InstructorProfile';
 
 interface UserProps {
   email: Email;
   name: string;
   isVerified: boolean;
   createdAt: Date;
+  instructorProfile?: InstructorProfile;
+  studentProfile?: InstructorProfile;
   password: string;
   roles: UserRole[];
 }
 
-type OmitedItems = "roles" | "createdAt";
+type OmitedItems = 'roles' | 'createdAt';
 
 export type CreateUserProps = Omit<UserProps, OmitedItems> & {
   createdAt?: Date;
@@ -32,7 +35,7 @@ export class User extends Entity<UserProps> {
       throw new InvalidLengthException(
         nameof<UserProps>((u) => u.name),
         User.NAME_MIN_LENGTH,
-        User.NAME_MAX_LENGTH
+        User.NAME_MAX_LENGTH,
       );
     }
 
@@ -46,7 +49,7 @@ export class User extends Entity<UserProps> {
         roles: [UserRole.INSTRUCTOR],
         createdAt: props.createdAt ?? new Date(),
       },
-      id
+      id,
     );
   }
 
@@ -57,11 +60,28 @@ export class User extends Entity<UserProps> {
         roles: [UserRole.STUDENT],
         createdAt: props.createdAt ?? new Date(),
       },
-      id
+      id,
     );
   }
 
   static restore(props: UserProps, id: string): User {
     return new User(props, id);
+  }
+
+  public createInstructorProfile(profile: InstructorProfile) {
+    if (this.props.roles.includes(UserRole.INSTRUCTOR)) {
+      return;
+    }
+
+    this.props;
+    this.props.roles.push(UserRole.INSTRUCTOR);
+  }
+
+  public createStudentProfile() {
+    if (this.props.roles.includes(UserRole.STUDENT)) {
+      return;
+    }
+
+    this.props.roles.push(UserRole.STUDENT);
   }
 }

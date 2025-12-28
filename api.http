@@ -4,7 +4,52 @@ POST {{HOST}}/instructors HTTP/1.1
 Content-Type: application/json
 
 {
-	"email": "example@gmail.com",
+	"email": "example8@gmail.com",
 	"name": "example",
 	"password": "example123"
 }
+
+### 
+
+POST {{HOST}}/auth/instructor HTTP/1.1
+Content-Type: application/json
+
+{
+	"email": "example8@gmail.com",
+	"password": "example123"
+}
+
+###
+
+POST {{HOST}}/auth/instudent HTTP/1.1
+Content-Type: application/json
+
+{
+	"email": "example@gmail.com",
+	"password": "example123"
+}
+
+
+###
+
+POST {{HOST}}/auth/logout HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET {{HOST}}/auth/instructor/profile HTTP/1.1
+
+###
+
+POST {{HOST}}/lessons HTTP/1.1
+Content-Type: application/json
+
+{
+	"title": "Lesson 1",
+	"description": "This is the first lesson",
+	"instructorId": "INSTRUCTOR_ID_HERE"
+}
+
+###
+
+GET {{HOST}}/gateway/stripe/connect HTTP/1.1
