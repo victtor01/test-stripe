@@ -1,24 +1,22 @@
-// src/domain/entities/Lesson.ts
 import { ConflictException } from '@/shared/errors/ConflictException';
+import { ulid } from 'ulid';
 import { LessonStatus } from '../enums/LessonStatus';
+import { UlidId } from '../values/ulid-id';
 import { Entity } from './entity';
 
 interface LessonProps {
   studentId: string;
   instructorId: string;
-  scheduledDate: Date;
-  durationInMinutes: number;
+  startAt: Date;
+  endAt: Date;
   price: number;
-  currency: string; // 'BRL', 'USD'
-  topic: string;
+  topic?: string;
   description?: string;
-  meetingUrl?: string; // Link do Google Meet/Zoom
-
+  meetingUrl?: string;
   // Controle Financeiro
   status: LessonStatus;
-  stripePaymentIntentId?: string; // ID da transação no Stripe (para capturar/estornar)
-  stripeTransferId?: string; // ID da transferência para o instrutor
-
+  stripePaymentIntentId?: string;
+  stripeTransferId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,33 +30,40 @@ type OmittedItems =
 
 export type CreateLessonProps = Omit<LessonProps, OmittedItems>;
 
-export class Lesson extends Entity<LessonProps> {
+export class Lesson extends Entity<LessonProps, UlidId> {
   get data() {
     return this.snapshot();
   }
 
-  private constructor(props: LessonProps, id?: string) {
-    if (props.scheduledDate < new Date()) {
-      throw new ConflictException('A aula não pode ser agendada no passado.');
-    }
-    super(props, id);
+  protected nextId(): string {
+    return ulid();
   }
 
-  public static create(props: CreateLessonProps, id?: string) {
+  private constructor(props: LessonProps, id?: UlidId) {
+    const now = Date.now();
+    const startAt = props.startAt.getTime();
+
+    if (startAt <= now) {
+      throw new ConflictException('A aula deve ser agendada para o futuro.');
+    }
+
+    super(props, id || UlidId.create());
+  }
+
+  public static create(props: CreateLessonProps) {
     return new Lesson(
       {
         ...props,
         status: LessonStatus.PENDING_PAYMENT,
-        currency: props.currency || 'BRL',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      id,
+      UlidId.create(),
     );
   }
 
   public static restore(props: LessonProps, id: string): Lesson {
-    return new Lesson(props, id);
+    return new Lesson(props, new UlidId(id));
   }
 
   public markAsPaid(paymentIntentId: string) {

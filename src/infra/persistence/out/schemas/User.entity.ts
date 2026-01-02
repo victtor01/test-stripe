@@ -23,7 +23,11 @@ export class UserEntity {
   @CreateDateColumn()
   createdAt!: Date;
 
-  @Column('simple-json')
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    array: true,
+  })
   roles!: UserRole[];
 
   @OneToOne(() => InstructorProfileEntity, (instructor) => instructor.user)

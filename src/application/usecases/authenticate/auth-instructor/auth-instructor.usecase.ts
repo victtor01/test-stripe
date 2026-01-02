@@ -37,11 +37,11 @@ export class AuthInstructorUseCase {
     }
 
     const accessToken = await this.tokensService.generateAccessToken({
-      userId: user.id,
+      userId: user.id.toString(),
       roles: data.roles,
     });
 
-    const refreshToken = await this.tokensService.generateRefreshToken(user.id);
+    const refreshToken = await this.tokensService.generateRefreshToken(user.id.toString());
 
     return {
       accessToken: accessToken,

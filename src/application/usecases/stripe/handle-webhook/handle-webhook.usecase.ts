@@ -12,8 +12,7 @@ export class HandleStripeWebhookUseCase {
       if (account.details_submitted) {
         console.log(`✅ Instrutor ${account.id} completou o cadastro!`);
 
-        const profile = await this.instructorRepo
-					.findByStripeAccountId(account.id);
+        const profile = await this.instructorRepo.findByStripeAccountId(account.id);
 
         if (profile) {
           profile.completeOnboarding();
@@ -21,6 +20,11 @@ export class HandleStripeWebhookUseCase {
           await this.instructorRepo.save(profile);
         }
       }
+    }
+
+    if (event.type === 'payment_intent.succeeded') {
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      console.log(`Pagamento recebido para a aula: ${paymentIntent.metadata.lessonId}`);
     }
   }
 }

@@ -5,8 +5,6 @@ export class InstructorProfilePersistenceMapper {
   static toModel(entity: InstructorProfileEntity | null): InstructorProfile | null {
     if (!entity) return null;
 
-    console.log(entity)
-
     return InstructorProfile.restore(
       {
         userId: entity.userId,
@@ -25,7 +23,7 @@ export class InstructorProfilePersistenceMapper {
   static toEntity(model: InstructorProfile): InstructorProfileEntity {
     const entity = new InstructorProfileEntity();
 
-    entity.id = model.id;
+    entity.id = model.id.toString();
     entity.userId = model.data.userId;
     entity.biography = model.data.biography;
     entity.specialties = model.data.specialties;

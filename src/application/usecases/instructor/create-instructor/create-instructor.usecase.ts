@@ -1,4 +1,4 @@
-import { CreateInstructorSchema } from '@/api/schemas/users/create-instructor.schema';
+import { CreateUserSchema } from '@/api/schemas/users/create-instructor.schema';
 import { HashService } from '@/application/ports/in/hash.service';
 import { InstructorProfileRepository } from '@/application/ports/out/instructor-profile.repository';
 import { UsersRepository } from '@/application/ports/out/users.repository';
@@ -18,7 +18,7 @@ export class CreateInstructorUseCase {
   ) {}
 
   @Transactional()
-  public async execute(data: CreateInstructorSchema): Promise<User> {
+  public async execute(data: CreateUserSchema): Promise<User> {
     const userExists = await this.usersRepository.findByEmail(data.email);
 
     if (userExists) {
@@ -35,7 +35,7 @@ export class CreateInstructorUseCase {
     });
 
     const instructorProfile = InstructorProfile.create({
-      userId: instructor.id,
+      userId: instructor.id.toString(),
     });
 
     await this.usersRepository.save(instructor);

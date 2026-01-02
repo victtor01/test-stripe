@@ -20,7 +20,7 @@ export class UserPersistenceMapper {
   static toEntity(model: User): UserEntity {
     const entity = new UserEntity();
 
-    entity.id = model.id;
+    entity.id = model.id.toString();
     entity.email = model.data.email.getValue();
     entity.name = model.data.name;
     entity.isVerified = model.data.isVerified;

@@ -1,4 +1,4 @@
-import { CreateInstructorSchema } from "@/api/schemas/users/create-instructor.schema";
+import { CreateUserSchema } from "@/api/schemas/users/create-instructor.schema";
 import { HashService } from "@/application/ports/in/hash.service";
 import { UsersRepository } from "@/application/ports/out/users.repository";
 import { Email } from "@/domain/entities/Email";
@@ -13,7 +13,7 @@ export class CreateStudentUseCase {
 		private readonly hashService: HashService
 	) {}
 
-	public async execute(data: CreateInstructorSchema): Promise<User> {
+	public async execute(data: CreateUserSchema): Promise<User> {
 		const userExists = await this.usersRepository.findByEmail(data.email);
 
 		if (userExists) {
@@ -22,15 +22,15 @@ export class CreateStudentUseCase {
 
 		const hashPass: string = await this.hashService.hash(data.password);
 
-		const instructor = User.createStudent({
+		const student = User.createStudent({
 			name: data.name,
 			email: Email.create(data.email),
 			isVerified: false,
 			password: hashPass,
 		});
 
-		await this.usersRepository.save(instructor);
+		await this.usersRepository.save(student);
 
-		return instructor;
+		return student;
 	}
 }

@@ -8,11 +8,18 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ulid } from 'ulid';
 import { UserEntity } from './User.entity';
 
 @Entity('lessons')
 export class LessonEntity {
-  @PrimaryColumn('uuid')
+  constructor() {
+    if (!this.id) {
+      this.id = ulid();
+    }
+  }
+
+  @PrimaryColumn('varchar', { length: 26 })
   id!: string;
 
   @Column('uuid')
@@ -29,26 +36,20 @@ export class LessonEntity {
   @JoinColumn({ name: 'instructorId' })
   instructor!: UserEntity;
 
-  @Column()
-  scheduledDate!: Date;
+  @Column({ type: 'timestamptz' })
+  startAt!: Date;
+
+  @Column({ type: 'timestamptz' })
+  endAt!: Date;
 
   @Column('int')
-  durationInMinutes!: number;
-
-  @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
 
-  @Column({ length: 3, default: 'BRL' })
-  currency!: string;
-
-  @Column()
-  topic!: string;
+  @Column({ nullable: true })
+  topic?: string;
 
   @Column('text', { nullable: true })
   description?: string;
-
-  @Column({ nullable: true })
-  meetingUrl?: string;
 
   @Column({
     type: 'varchar',

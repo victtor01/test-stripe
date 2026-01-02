@@ -1,16 +1,17 @@
-import { CreateInstructorUseCase } from "@/application/usecases/instructor/create-instructor/create-instructor.usecase";
+import { CreateStudentUseCase } from "@/application/usecases/students/create-student/create-student.usecase";
 import { Controller, Post } from "@/infra/decorators/controller.decorator";
 import { Request, Response } from "express";
 import { createUserSchema } from "../schemas/users/create-instructor.schema";
 
-@Controller("/instructors")
-export class InstructorController {
-  constructor(private readonly createInstructor: CreateInstructorUseCase) {}
+@Controller("/students")
+export class StudentController {
+  constructor(private readonly createStudentUseCase: CreateStudentUseCase) {}
 
   @Post()
   public async create(req: Request, res: Response): Promise<void> {
     const schema = createUserSchema.parse(req.body);
-    const created = await this.createInstructor.execute(schema);
+		
+    const created = await this.createStudentUseCase.execute(schema);
 
     res.json(created);
   }

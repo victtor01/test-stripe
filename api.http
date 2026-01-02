@@ -1,45 +1,63 @@
 @HOST = http://localhost:8080/api
 
+### @name create_instructor
+
 POST {{HOST}}/instructors HTTP/1.1
 Content-Type: application/json
 
 {
-	"email": "example8@gmail.com",
+	"email": "instructor@gmail.com",
 	"name": "example",
 	"password": "example123"
 }
 
-### 
+### @name create_student
+
+POST {{HOST}}/students HTTP/1.1
+Content-Type: application/json
+
+{
+	"email": "student@gmail.com",
+	"name": "student",
+	"password": "example123"
+}
+
+
+### @name authentication
 
 POST {{HOST}}/auth/instructor HTTP/1.1
 Content-Type: application/json
 
 {
-	"email": "example8@gmail.com",
+	"email": "instructor@gmail.com",
 	"password": "example123"
 }
 
-###
+### -------
 
-POST {{HOST}}/auth/instudent HTTP/1.1
+POST {{HOST}}/auth/student HTTP/1.1
 Content-Type: application/json
 
 {
-	"email": "example@gmail.com",
+	"email": "student@gmail.com",
 	"password": "example123"
 }
 
-
-###
+### -------
 
 POST {{HOST}}/auth/logout HTTP/1.1
 Content-Type: application/json
 
-###
+### -------
 
 GET {{HOST}}/auth/instructor/profile HTTP/1.1
 
-###
+### @name explore
+
+GET {{HOST}}/explorer/instructors HTTP/1.1
+
+### @name lessons
+
 
 POST {{HOST}}/lessons HTTP/1.1
 Content-Type: application/json
@@ -47,9 +65,25 @@ Content-Type: application/json
 {
 	"title": "Lesson 1",
 	"description": "This is the first lesson",
-	"instructorId": "INSTRUCTOR_ID_HERE"
+	"instructorId": "f29614dc-a886-4968-acb5-bcaa9acf40e2",
+	"startAt":"2026-01-15T10:00:00Z"
 }
 
 ###
 
+GET {{HOST}}/lessons HTTP/1.1
+
+### -------
+
 GET {{HOST}}/gateway/stripe/connect HTTP/1.1
+
+###
+
+### @name payments
+
+POST {{HOST}}/payments HTTP/1.1
+Content-Type: application/json
+
+{
+	"lessonId": "01KDYDJWJQ7YT5YJH618G4K915"
+}
