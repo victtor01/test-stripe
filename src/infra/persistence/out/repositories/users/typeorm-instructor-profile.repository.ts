@@ -11,7 +11,13 @@ export class TypeormInstructorProfileRepository
   constructor() {
     super(InstructorProfileEntity);
   }
-  
+
+  async update(profile: InstructorProfile): Promise<void> {
+    const entity = InstructorProfilePersistenceMapper.toEntity(profile);
+
+    await this.repository.update({ id: entity.id }, entity);
+  }
+
   async findByStripeAccountId(stripeAccountId: string): Promise<InstructorProfile | null> {
     return await this.repository
       .findOne({ where: { stripeAccountId } })
@@ -19,7 +25,7 @@ export class TypeormInstructorProfileRepository
   }
 
   async findByUserId(userId: string): Promise<InstructorProfile | null> {
-    console.log("userId", userId)
+    console.log('procurando por userId no repository', userId);
     const instructorProfileEntity = await this.repository.findOne({ where: { userId } });
     return InstructorProfilePersistenceMapper.toModel(instructorProfileEntity);
   }

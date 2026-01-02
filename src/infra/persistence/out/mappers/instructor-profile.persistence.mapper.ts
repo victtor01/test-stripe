@@ -13,6 +13,7 @@ export class InstructorProfilePersistenceMapper {
         createdAt: entity.createdAt,
         updatedAt: entity.updatedAt,
         linkedinUrl: entity.linkedinUrl,
+        balance: entity.balance,
         stripeAccountId: entity.stripeAccountId,
         onboardingCompleted: entity.onboardingCompleted,
       },
@@ -28,6 +29,7 @@ export class InstructorProfilePersistenceMapper {
     entity.biography = model.data.biography;
     entity.specialties = model.data.specialties;
     entity.createdAt = model.data.createdAt;
+    entity.balance = model.data.balance;
     entity.updatedAt = model.data.updatedAt;
     entity.linkedinUrl = model.data.linkedinUrl;
     entity.stripeAccountId = model.data.stripeAccountId;

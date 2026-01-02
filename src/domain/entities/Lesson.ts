@@ -14,6 +14,7 @@ interface LessonProps {
   description?: string;
   meetingUrl?: string;
   // Controle Financeiro
+  transferredAt?: Date | null;         
   status: LessonStatus;
   stripePaymentIntentId?: string;
   stripeTransferId?: string;
@@ -76,6 +77,7 @@ export class Lesson extends Entity<LessonProps, UlidId> {
   }
 
   public completeLesson() {
+    console.log(this.props.status);
     if (this.props.status !== LessonStatus.SCHEDULED) {
       throw new ConflictException('A aula precisa estar agendada para ser concluída.');
     }
@@ -97,6 +99,35 @@ export class Lesson extends Entity<LessonProps, UlidId> {
       throw new ConflictException('Não é possível cancelar uma aula já paga ao instrutor.');
     }
     this.props.status = LessonStatus.CANCELED;
+    this.props.updatedAt = new Date();
+  }
+
+  public isCompleted(): boolean {
+    const imcompleteStatus = [LessonStatus.SCHEDULED, LessonStatus.PENDING_PAYMENT];
+
+    return !imcompleteStatus.includes(this.props.status);
+  }
+
+  public updateTransferId(t: string) {
+    this.props.stripeTransferId = t;
+  }
+
+  public isPaid(): boolean {
+    return this.data.status !== LessonStatus.PENDING_PAYMENT;
+  }
+
+  public markAsTransferred(transferId: string): void {
+    if (this.props.stripeTransferId) {
+      throw new Error('Esta aula já foi transferida anteriormente.');
+    }
+
+    if (!this.props.stripePaymentIntentId) {
+      throw new Error('Não é possível transferir uma aula que não possui registro de pagamento (PaymentIntent).');
+    }
+
+    this.props.stripeTransferId = transferId;
+    this.props.transferredAt = new Date();
+    
     this.props.updatedAt = new Date();
   }
 }

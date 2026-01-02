@@ -6,7 +6,7 @@ POST {{HOST}}/instructors HTTP/1.1
 Content-Type: application/json
 
 {
-	"email": "instructor@gmail.com",
+	"email": "instructor2@gmail.com",
 	"name": "example",
 	"password": "example123"
 }
@@ -29,7 +29,7 @@ POST {{HOST}}/auth/instructor HTTP/1.1
 Content-Type: application/json
 
 {
-	"email": "instructor@gmail.com",
+	"email": "instructor2@gmail.com",
 	"password": "example123"
 }
 
@@ -63,9 +63,9 @@ POST {{HOST}}/lessons HTTP/1.1
 Content-Type: application/json
 
 {
-	"title": "Lesson 1",
+	"title": "Lesson 12",
 	"description": "This is the first lesson",
-	"instructorId": "f29614dc-a886-4968-acb5-bcaa9acf40e2",
+	"instructorId": "639ec2e1-c181-44e5-9dc1-de0a79bf458c",
 	"startAt":"2026-01-15T10:00:00Z"
 }
 
@@ -73,17 +73,40 @@ Content-Type: application/json
 
 GET {{HOST}}/lessons HTTP/1.1
 
+
+###
+
+PUT {{HOST}}/lessons/complete/01KDZVY0Z4F0B2SEE3GKPSFMDQ HTTP/1.1
+Content-Type: application/json
+
 ### -------
 
 GET {{HOST}}/gateway/stripe/connect HTTP/1.1
 
-###
-
 ### @name payments
 
-POST {{HOST}}/payments HTTP/1.1
+POST {{HOST}}/payments/link HTTP/1.1
 Content-Type: application/json
 
 {
-	"lessonId": "01KDYDJWJQ7YT5YJH618G4K915"
+	"lessonId": "01KE063AGWQFT62H3MTDPVYDVA"
 }
+
+###
+
+POST {{HOST}}/payments/pix HTTP/1.1
+Content-Type: application/json
+
+{
+	"lessonId": "01KE063AGWQFT62H3MTDPVYDVA"
+}
+
+###
+
+POST {{HOST}}/instructors/refund HTTP/1.1
+Content-Type: application/json
+
+###
+GET {{HOST}}/instructors/balance HTTP/1.1
+
+###3ea98a45-0489-47f7-a87e-b4b76a06c12a

@@ -18,11 +18,15 @@ import { InstructorsRepository } from './application/ports/out/instructors.repos
 import { LessonRepository } from './application/ports/out/lesson.repository';
 import { UsersRepository } from './application/ports/out/users.repository';
 import { AuthInstructorUseCase } from './application/usecases/authenticate/auth-instructor/auth-instructor.usecase';
-import { FindProfileUseCase as FindInstructorProfileUseCase } from './application/usecases/authenticate/find-profile/find-profile.usecase';
+import { FindInstructorProfileUseCase } from './application/usecases/authenticate/find-profile/find-profile.usecase';
 import { FindAllInstructorsUseCase } from './application/usecases/explorer/find-all-instructors/find-all-instructors.usecase';
 import { CreateInstructorUseCase } from './application/usecases/instructor/create-instructor/create-instructor.usecase';
+import { GetBalanceOfInstructorUseCase } from './application/usecases/instructor/get-balance/get-balance.usecase';
+import { CompleteLessonUseCase } from './application/usecases/lesson/complete-lesson/complete-lesson.usecase';
 import { FindLessonsByStudentUseCase } from './application/usecases/lesson/find-by-student/find-lessons-by-student.usecase';
+import { CreateLinkIntentUseCase } from './application/usecases/payment/create-link-intent/create-link-intent.usecase';
 import { CreatePixIntentUseCase } from './application/usecases/payment/create-pix-intent/create-pix-intent.usecase';
+import { RefundPaymentUseCase } from './application/usecases/payment/refund-payment/refund-payment.usecase';
 import { ConnectStripeUseCase } from './application/usecases/stripe/connect-stripe/connect-stripe.usecase';
 import { HandleStripeWebhookUseCase } from './application/usecases/stripe/handle-webhook/handle-webhook.usecase';
 import { CreateStudentUseCase } from './application/usecases/students/create-student/create-student.usecase';
@@ -61,6 +65,10 @@ container.resolve(FindInstructorProfileUseCase);
 container.resolve(FindAllInstructorsUseCase);
 container.resolve(CreatePixIntentUseCase);
 container.resolve(FindLessonsByStudentUseCase);
+container.resolve(CompleteLessonUseCase);
+container.resolve(RefundPaymentUseCase);
+container.resolve(CreateLinkIntentUseCase);
+container.resolve(GetBalanceOfInstructorUseCase);
 
 const controllers = [
   AuthController,
@@ -74,5 +82,34 @@ const controllers = [
 ];
 
 const routers = createRouter(controllers);
+
+// async function checkAccountStatus() {
+//   const accountId = 'acct_1SlA06DfsiLLlc83';
+//   try {
+//     const accountLink = await stripe.accountLinks.create({
+//       account: accountId,
+//       refresh_url: 'http://localhost:3000/reauth',
+//       return_url: 'http://localhost:3000/success',
+//       type: 'account_onboarding',
+//     });
+
+//     console.log('👇 CLIQUE NESTE LINK PARA DESBLOQUEAR A CONTA:');
+//     console.log(accountLink.url);
+//   } catch (error) {
+//     console.error('Erro:', error);
+//   }
+
+//   const account = await stripe.accounts.retrieve(accountId);
+
+//   console.log('--- Status da Conta ---');
+//   console.log(`Charges Enabled: ${account.charges_enabled}`); // Deve estar false
+//   console.log(`Payouts Enabled: ${account.payouts_enabled}`); // Deve estar false
+//   console.log('--- Motivo do Bloqueio ---');
+//   console.log(account.requirements?.disabled_reason);
+//   console.log('--- O que falta preencher ---');
+//   console.log(account.requirements?.currently_due);
+// }
+
+// checkAccountStatus();
 
 export { routers };

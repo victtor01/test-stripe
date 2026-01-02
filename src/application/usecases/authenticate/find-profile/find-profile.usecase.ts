@@ -4,7 +4,7 @@ import { Injectable } from '@/infra/decorators/injectable.decorator';
 import { BadRequestException } from '@/shared/errors/BadRequestException';
 
 @Injectable()
-export class FindProfileUseCase {
+export class FindInstructorProfileUseCase {
   constructor(private readonly instructorProfileRepository: InstructorProfileRepository) {}
 
   public async execute(userId: string): Promise<InstructorProfile> {

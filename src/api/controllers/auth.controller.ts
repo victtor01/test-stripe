@@ -1,7 +1,7 @@
 import { AuthTokensDTO } from '@/application/dtos/auth-tokens.dto';
 import { AuthInstructorUseCase } from '@/application/usecases/authenticate/auth-instructor/auth-instructor.usecase';
 import { AuthStudentUseCase } from '@/application/usecases/authenticate/auth-student/auth-student.usecase';
-import { FindProfileUseCase } from '@/application/usecases/authenticate/find-profile/find-profile.usecase';
+import { FindInstructorProfileUseCase } from '@/application/usecases/authenticate/find-profile/find-profile.usecase';
 import { Controller, Get, Post } from '@/infra/decorators/controller.decorator';
 import { Use } from '@/infra/decorators/middleware.decorator';
 import { CookieService } from '@/infra/persistence/out/cookies/cookies.service';
@@ -16,7 +16,7 @@ export class AuthController {
     private readonly authInstructor: AuthInstructorUseCase,
     private readonly studentUseCase: AuthStudentUseCase,
     private readonly cookiesService: CookieService,
-    private readonly findProfileUseCase: FindProfileUseCase,
+    private readonly findProfileUseCase: FindInstructorProfileUseCase,
   ) {}
 
   @Post('/instructor')

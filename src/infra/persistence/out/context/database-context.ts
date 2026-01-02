@@ -13,6 +13,6 @@ export const AppDataSource = new DataSource({
   database: 'test_stripe',
   synchronize: true,
   logging: false,
-  dropSchema: true,
+  dropSchema: false,
   entities: [UserEntity, InstructorProfileEntity, StudentProfileEntity, LessonEntity],
 });

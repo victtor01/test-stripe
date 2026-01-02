@@ -1,15 +1,15 @@
 import { CreatePaymentLessonDTO } from '@/application/dtos/create-payment-pix.dto';
-import { PixPaymentResponseDTO } from '@/application/dtos/pix-payment-response.dto';
+import { LinkPaymentResponse } from '@/application/dtos/link-payment-response.dto';
 import { PaymentService } from '@/application/ports/in/payment.service';
 import { InstructorProfileRepository } from '@/application/ports/out/instructor-profile.repository';
 import { LessonRepository } from '@/application/ports/out/lesson.repository';
 import { UsersRepository } from '@/application/ports/out/users.repository';
 import { Injectable } from '@/infra/decorators/injectable.decorator';
 import { BadRequestException } from '@/shared/errors/BadRequestException';
-import { CreatePixIntentCommand } from './create-pix-intent.command';
+import { CreateLinkIntentCommand } from './create-link-intent.command';
 
 @Injectable()
-export class CreatePixIntentUseCase {
+export class CreateLinkIntentUseCase {
   constructor(
     private readonly gatewayService: PaymentService,
     private readonly lessonRepository: LessonRepository,
@@ -17,7 +17,7 @@ export class CreatePixIntentUseCase {
     private readonly instructorProfileRepo: InstructorProfileRepository,
   ) {}
 
-  async execute(data: CreatePixIntentCommand): Promise<PixPaymentResponseDTO> {
+  async execute(data: CreateLinkIntentCommand): Promise<LinkPaymentResponse> {
     const [lesson, student] = await Promise.all([
       this.lessonRepository.findById(data.lessonId),
       this.usersRepository.findById(data.studentId),
@@ -46,7 +46,7 @@ export class CreatePixIntentUseCase {
       instructorId: instructor.data.stripeAccountId,
     } satisfies CreatePaymentLessonDTO;
 
-    const intent = await this.gatewayService.generatePaymentPix(props);
+    const intent = await this.gatewayService.generatePaymentLink(props);
 
     return intent;
   }

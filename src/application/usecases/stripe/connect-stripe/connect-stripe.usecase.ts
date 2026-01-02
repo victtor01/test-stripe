@@ -21,13 +21,13 @@ export class ConnectStripeUseCase {
 
   @Transactional()
   public async execute({ userId }: ConnectStripeCommand): Promise<Output> {
-    // 1. Busca o Usuário para pegar o e-mail
     const user = await this.usersRepo.findById(userId);
     if (!user) {
+      console.log('usuário não encontrado!');
+
       throw new NotFoundException('Usuário não encontrado.');
     }
 
-    // 2. Busca o Perfil do Instrutor
     const profile = await this.instructorRepo.findByUserId(userId);
     if (!profile) {
       throw new BadRequestException('Este usuário não possui um perfil de instrutor.');

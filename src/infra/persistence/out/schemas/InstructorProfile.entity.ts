@@ -32,11 +32,15 @@ export class InstructorProfileEntity {
   @Column({ type: 'boolean', default: false })
   onboardingCompleted!: boolean;
 
+  @Column({ type: "integer", default: 0 })
+  balance!: number;
+
   @OneToOne(() => UserEntity, (user) => user.instructorProfile, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
+
 
   @CreateDateColumn()
   createdAt!: Date;

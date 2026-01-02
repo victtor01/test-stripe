@@ -10,11 +10,12 @@ interface InstructorProfileProps {
   linkedinUrl?: string;
   stripeAccountId?: string;
   onboardingCompleted: boolean;
+  balance: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-type OmittedItems = 'createdAt' | 'updatedAt' | 'onboardingCompleted';
+type OmittedItems = 'createdAt' | 'updatedAt' | 'onboardingCompleted' | 'balance';
 
 export type CreateInstructorProfileProps = Omit<InstructorProfileProps, OmittedItems>;
 
@@ -50,18 +51,17 @@ export class InstructorProfile extends Entity<InstructorProfileProps, UuidId> {
         createdAt: new Date(),
         updatedAt: new Date(),
         stripeAccountId: props.stripeAccountId,
+        balance: 0,
         onboardingCompleted: false,
       },
       UuidId.create(),
     );
   }
 
-  // Para reconstituir do banco de dad  os (Hydration)
   public static restore(props: InstructorProfileProps, id: string): InstructorProfile {
     return new InstructorProfile(props, new UuidId(id));
   }
 
-  // Exemplo de método de domínio para alteração de estado
   public updateBiography(newBio: string) {
     if (newBio.length < InstructorProfile.BIO_MIN_LENGTH) {
       throw new InvalidLengthException(
@@ -74,11 +74,28 @@ export class InstructorProfile extends Entity<InstructorProfileProps, UuidId> {
     this.props.updatedAt = new Date();
   }
 
-  public completeOnboarding() {
+  public completeOnboarding(): void {
     this.props.onboardingCompleted = true;
   }
 
-  public updateStripeAccountId(stripeAccountId: string) {
+  public updateStripeAccountId(stripeAccountId: string): void {
     this.props.stripeAccountId = stripeAccountId;
+  }
+
+  public addBalance(value: number): void {
+    if (value > 0) {
+      this.props.balance += value;
+    }
+  }
+
+  public getBalance(): number {
+    return this.props.balance;
+  }
+  
+  public withdrawBalance(amount: number) {
+    if (amount < 0) throw new Error('Valor inválido');
+    if (this.props.balance < amount) throw new Error('Saldo insuficiente');
+
+    this.props.balance -= amount;
   }
 }
